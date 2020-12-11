@@ -15,7 +15,7 @@ class MenuOption:
         self.width, self.height = self.size
 
     def trigger(self):
-        self.action(self.options)
+        self.action(*self.options)
 
 class UI:
     def __init__(self, controller, options_dict):
@@ -42,7 +42,7 @@ class UI:
         self.menu_options = []
 
         for key in options_dict:
-            self.menu_options.append(MenuOption(key, controller.change_station, self.font, options_dict[key]))
+            self.menu_options.append(MenuOption(key, controller.change_station, self.font, (options_dict[key], True)))
 
         self.current_menu_option = 1
 
