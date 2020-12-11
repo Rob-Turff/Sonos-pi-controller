@@ -5,20 +5,30 @@ import atexit
 
 from PIL import ImageFont, Image, ImageDraw
 from gfxhat import touch, lcd, backlight, fonts
+from main import change_station
 
-print("""menu-options.py
-This example shows how you might store a list of menu options associated
-with functions and navigate them on GFX HAT.
-Press Ctrl+C or select "Exit" to exit.
-""")
+def __init__():
 
-width, height = lcd.dimensions()
+    print("""menu-options.py
+    This example shows how you might store a list of menu options associated
+    with functions and navigate them on GFX HAT.
+    Press Ctrl+C or select "Exit" to exit.
+    """)
 
-font = ImageFont.truetype(fonts.BitbuntuFull, 10)
+    global font, image, draw, width, height
+    width, height = lcd.dimensions()
+    font = ImageFont.truetype(fonts.BitbuntuFull, 10)
+    image = Image.new('P', (width, height))
+    draw = ImageDraw.Draw(image)
 
-#image = Image.new('P', (width, height))
+    for x in range(6):
+        touch.set_led(x, 0)
+        backlight.set_pixel(x, 255, 255, 255)
+        touch.on(x, handler)
 
-#draw = ImageDraw.Draw(image)
+    backlight.show()
+
+    atexit.register(cleanup)
 
 class MenuOption:
     def __init__(self, name, action, options=()):
@@ -53,62 +63,49 @@ def cleanup():
     lcd.clear()
     lcd.show()
 
-menu_options = [
-            MenuOption('Set BL Red', set_backlight, (255, 0, 0)),
-            MenuOption('Set BL Green', set_backlight, (0, 255, 0)),
-            MenuOption('Set BL Blue', set_backlight, (0, 0, 255)),
-            MenuOption('Set BL Purple', set_backlight, (255, 0, 255)),
-            MenuOption('Set BL White', set_backlight, (255, 255, 255)),
-            MenuOption('Exit', sys.exit, (0,))
-        ]
+def start(options_dict):
+    global menu_options
+    menu_options = []
 
-current_menu_option = 1
+    for key in options_dict:
+        menu_options.append(MenuOption(key), change_station, options_dict[key])
 
-trigger_action = False
+    current_menu_option = 1
 
+    trigger_action = False
 
-for x in range(6):
-    touch.set_led(x, 0)
-    backlight.set_pixel(x, 255, 255, 255)
-    touch.on(x, handler)
+    try:
+        while True:
+            image.paste(0, (0, 0, width, height))
+            offset_top = 0
 
-backlight.show()
+            if trigger_action:
+                menu_options[current_menu_option].trigger()
+                trigger_action = False
 
+            for index in range(len(menu_options)):
+                if index == current_menu_option:
+                    break
+                offset_top += 12
 
-atexit.register(cleanup)
+            for index in range(len(menu_options)):
+                x = 10
+                y = (index * 12) + (height / 2) - 4 - offset_top
+                option = menu_options[index]
+                if index == current_menu_option:
+                    draw.rectangle(((x-2, y-1), (width, y+10)), 1)
+                draw.text((x, y), option.name, 0 if index == current_menu_option else 1, font)
 
-try:
-    while True:
-        image.paste(0, (0, 0, width, height))
-        offset_top = 0
+            w, h = font.getsize('>')
+            draw.text((0, (height - h) / 2), '>', 1, font)
 
-        if trigger_action:
-            menu_options[current_menu_option].trigger()
-            trigger_action = False
+            for x in range(width):
+                for y in range(height):
+                    pixel = image.getpixel((x, y))
+                    lcd.set_pixel(x, y, pixel)
 
-        for index in range(len(menu_options)):
-            if index == current_menu_option:
-                break
-            offset_top += 12
+            lcd.show()
+            time.sleep(1.0 / 30)
 
-        for index in range(len(menu_options)):
-            x = 10
-            y = (index * 12) + (height / 2) - 4 - offset_top
-            option = menu_options[index]
-            if index == current_menu_option:
-                draw.rectangle(((x-2, y-1), (width, y+10)), 1)
-            draw.text((x, y), option.name, 0 if index == current_menu_option else 1, font)
-
-        w, h = font.getsize('>')
-        draw.text((0, (height - h) / 2), '>', 1, font)
-
-        for x in range(width):
-            for y in range(height):
-                pixel = image.getpixel((x, y))
-                lcd.set_pixel(x, y, pixel)
-
-        lcd.show()
-        time.sleep(1.0 / 30)
-
-except KeyboardInterrupt:
-    cleanup()
+    except KeyboardInterrupt:
+        cleanup()
