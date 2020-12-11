@@ -3,9 +3,7 @@ import time
 import sys
 import atexit
 
-from PIL.Image import Image
-from PIL.ImageDraw import ImageDraw
-from PIL.ImageFont import ImageFont
+from PIL import ImageFont, Image, ImageDraw
 from gfxhat import touch, lcd, backlight, fonts
 
 print("""menu-options.py
