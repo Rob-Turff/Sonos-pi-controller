@@ -3,8 +3,8 @@ import time
 import sys
 import atexit
 
+from PIL import ImageFont, Image, ImageDraw
 from gfxhat import touch, lcd, backlight, fonts
-from PIL import Image, ImageFont, ImageDraw
 
 print("""menu-options.py
 This example shows how you might store a list of menu options associated
