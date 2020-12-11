@@ -7,102 +7,104 @@ from PIL import ImageFont, Image, ImageDraw
 from gfxhat import touch, lcd, backlight, fonts
 import controller
 
-print("""menu-options.py
-This example shows how you might store a list of menu options associated
-with functions and navigate them on GFX HAT.
-Press Ctrl+C or select "Exit" to exit.
-""")
-
-width, height = lcd.dimensions()
-font = ImageFont.truetype(fonts.BitbuntuFull, 10)
-image = Image.new('P', (width, height))
-draw = ImageDraw.Draw(image)
 
 class MenuOption:
-    def __init__(self, name, action, options=()):
+    def __init__(self, name, action, font, options=()):
         self.name = name
         self.action = action
         self.options = options
-        self.size = font.getsize(name)
+        self.size = font.getsize(self.name)
         self.width, self.height = self.size
 
     def trigger(self):
+        print(*self.options)
         self.action(*self.options)
 
-def set_backlight(r, g, b):
-    backlight.set_all(r, g, b)
-    backlight.show()
+class UI:
+    def __init__(self):
+        print("""menu-options.py
+        This example shows how you might store a list of menu options associated
+        with functions and navigate them on GFX HAT.
+        Press Ctrl+C or select "Exit" to exit.
+        """)
 
-def handler(ch, event):
-    global current_menu_option, trigger_action
-    if event != 'press':
-        return
-    if ch == 1:
-        current_menu_option += 1
-    if ch == 0:
-        current_menu_option -= 1
-    if ch == 4:
-        trigger_action = True
-    current_menu_option %= len(menu_options)
+        self.width, self.height = lcd.dimensions()
+        self.font = ImageFont.truetype(fonts.BitbuntuFull, 10)
+        self.image = Image.new('P', (self.width, self.height))
+        self.draw = ImageDraw.Draw(self.image)
 
-def cleanup():
-    backlight.set_all(0, 0, 0)
-    backlight.show()
-    lcd.clear()
-    lcd.show()
+        for x in range(6):
+            touch.set_led(x, 0)
+            backlight.set_pixel(x, 255, 255, 255)
+            touch.on(x, self.handler)
 
-for x in range(6):
-    touch.set_led(x, 0)
-    backlight.set_pixel(x, 255, 255, 255)
-    touch.on(x, handler)
+        backlight.show()
 
-backlight.show()
+        atexit.register(self.cleanup)
 
-atexit.register(cleanup)
+    def set_backlight(self, r, g, b):
+        backlight.set_all(r, g, b)
+        backlight.show()
 
-def start(options_dict):
-    global menu_options, current_menu_option, trigger_action
-    menu_options = []
+    def handler(self, ch, event):
+        if event != 'press':
+            return
+        if ch == 1:
+            self.current_menu_option += 1
+        if ch == 0:
+            self.current_menu_option -= 1
+        if ch == 4:
+            self.trigger_action = True
+        self.current_menu_option %= len(self.menu_options)
 
-    for key in options_dict:
-        menu_options.append(MenuOption(key, controller.change_station, options_dict[key]))
+    def cleanup(self):
+        backlight.set_all(0, 0, 0)
+        backlight.show()
+        lcd.clear()
+        lcd.show()
 
-    current_menu_option = 1
+    def start(self, options_dict):
+        self.menu_options = []
 
-    trigger_action = False
+        for key in options_dict:
+            self.menu_options.append(MenuOption(key, controller.change_station, self.font, options_dict[key]))
 
-    try:
-        while True:
-            image.paste(0, (0, 0, width, height))
-            offset_top = 0
+        current_menu_option = 1
 
-            if trigger_action:
-                menu_options[current_menu_option].trigger()
-                trigger_action = False
+        self.trigger_action = False
 
-            for index in range(len(menu_options)):
-                if index == current_menu_option:
-                    break
-                offset_top += 12
+        try:
+            while True:
+                self.image.paste(0, (0, 0, self.width, self.height))
+                offset_top = 0
 
-            for index in range(len(menu_options)):
-                x = 10
-                y = (index * 12) + (height / 2) - 4 - offset_top
-                option = menu_options[index]
-                if index == current_menu_option:
-                    draw.rectangle(((x-2, y-1), (width, y+10)), 1)
-                draw.text((x, y), option.name, 0 if index == current_menu_option else 1, font)
+                if self.trigger_action:
+                    self.menu_options[current_menu_option].trigger()
+                    self.trigger_action = False
 
-            w, h = font.getsize('>')
-            draw.text((0, (height - h) / 2), '>', 1, font)
+                for index in range(len(self.menu_options)):
+                    if index == current_menu_option:
+                        break
+                    offset_top += 12
 
-            for x in range(width):
-                for y in range(height):
-                    pixel = image.getpixel((x, y))
-                    lcd.set_pixel(x, y, pixel)
+                for index in range(len(self.menu_options)):
+                    x = 10
+                    y = (index * 12) + (self.height / 2) - 4 - offset_top
+                    option = self.menu_options[index]
+                    if index == current_menu_option:
+                        self.draw.rectangle(((x-2, y-1), (self.width, y+10)), 1)
+                    self.draw.text((x, y), option.name, 0 if index == current_menu_option else 1, self.font)
 
-            lcd.show()
-            time.sleep(1.0 / 30)
+                w, h = self.font.getsize('>')
+                self.draw.text((0, (self.height - h) / 2), '>', 1, self.font)
 
-    except KeyboardInterrupt:
-        cleanup()
+                for x in range(self.width):
+                    for y in range(self.height):
+                        pixel = self.image.getpixel((x, y))
+                        lcd.set_pixel(x, y, pixel)
+
+                lcd.show()
+                time.sleep(1.0 / 30)
+
+        except KeyboardInterrupt:
+            self.cleanup()
