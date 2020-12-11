@@ -16,9 +16,9 @@ width, height = lcd.dimensions()
 
 font = ImageFont.truetype(fonts.BitbuntuFull, 10)
 
-image = Image.new('P', (width, height))
+#image = Image.new('P', (width, height))
 
-draw = ImageDraw.Draw(image)
+#draw = ImageDraw.Draw(image)
 
 class MenuOption:
     def __init__(self, name, action, options=()):
