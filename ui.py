@@ -5,7 +5,7 @@ import atexit
 
 from PIL import ImageFont, Image, ImageDraw
 from gfxhat import touch, lcd, backlight, fonts
-from main import change_station
+import main
 
 def __init__():
 
@@ -68,7 +68,7 @@ def start(options_dict):
     menu_options = []
 
     for key in options_dict:
-        menu_options.append(MenuOption(key), change_station, options_dict[key])
+        menu_options.append(MenuOption(key), main.change_station, options_dict[key])
 
     current_menu_option = 1
 
