@@ -61,7 +61,7 @@ backlight.show()
 atexit.register(cleanup)
 
 def start(options_dict):
-    global menu_options
+    global menu_options, current_menu_option, trigger_action
     menu_options = []
 
     for key in options_dict:
