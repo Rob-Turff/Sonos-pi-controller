@@ -4,7 +4,7 @@ import sys
 import atexit
 
 from gfxhat import touch, lcd, backlight, fonts
-from Pillow import Image, ImageFont, ImageDraw
+from PIL import Image, ImageFont, ImageDraw
 
 print("""menu-options.py
 This example shows how you might store a list of menu options associated
