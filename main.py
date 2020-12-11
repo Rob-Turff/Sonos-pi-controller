@@ -1,3 +1,4 @@
 import controller
 
-controller.start()
+my_controller = controller.Controller()
+my_controller.start()

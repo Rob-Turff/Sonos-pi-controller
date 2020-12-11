@@ -5,8 +5,6 @@ import atexit
 
 from PIL import ImageFont, Image, ImageDraw
 from gfxhat import touch, lcd, backlight, fonts
-import controller
-
 
 class MenuOption:
     def __init__(self, name, action, font, options=()):
@@ -20,7 +18,7 @@ class MenuOption:
         self.action(self.options)
 
 class UI:
-    def __init__(self, options_dict):
+    def __init__(self, controller, options_dict):
         print("""menu-options.py
         This example shows how you might store a list of menu options associated
         with functions and navigate them on GFX HAT.
