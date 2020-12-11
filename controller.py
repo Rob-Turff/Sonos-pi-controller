@@ -27,8 +27,8 @@ def start():
         if station.title in station_dict:
             station_dict[station.title] = station.get_uri()
 
-    my_ui = ui.UI()
-    my_ui.start(station_dict)
+    my_ui = ui.UI(station_dict)
+    my_ui.start()
 
 def change_station(uri):
         print(main_player.get_current_track_info())
