@@ -7,28 +7,16 @@ from PIL import ImageFont, Image, ImageDraw
 from gfxhat import touch, lcd, backlight, fonts
 import controller
 
-def __init__():
+print("""menu-options.py
+This example shows how you might store a list of menu options associated
+with functions and navigate them on GFX HAT.
+Press Ctrl+C or select "Exit" to exit.
+""")
 
-    print("""menu-options.py
-    This example shows how you might store a list of menu options associated
-    with functions and navigate them on GFX HAT.
-    Press Ctrl+C or select "Exit" to exit.
-    """)
-
-    global font, image, draw, width, height
-    width, height = lcd.dimensions()
-    font = ImageFont.truetype(fonts.BitbuntuFull, 10)
-    image = Image.new('P', (width, height))
-    draw = ImageDraw.Draw(image)
-
-    for x in range(6):
-        touch.set_led(x, 0)
-        backlight.set_pixel(x, 255, 255, 255)
-        touch.on(x, handler)
-
-    backlight.show()
-
-    atexit.register(cleanup)
+width, height = lcd.dimensions()
+font = ImageFont.truetype(fonts.BitbuntuFull, 10)
+image = Image.new('P', (width, height))
+draw = ImageDraw.Draw(image)
 
 class MenuOption:
     def __init__(self, name, action, options=()):
@@ -62,6 +50,15 @@ def cleanup():
     backlight.show()
     lcd.clear()
     lcd.show()
+
+for x in range(6):
+    touch.set_led(x, 0)
+    backlight.set_pixel(x, 255, 255, 255)
+    touch.on(x, handler)
+
+backlight.show()
+
+atexit.register(cleanup)
 
 def start(options_dict):
     global menu_options
