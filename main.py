@@ -10,8 +10,8 @@ main_player: SoCo = None
 
 paradise_radio = "aac://https://stream.radioparadise.com/mellow-320"
 
-ip = "192.168.1.178"
-# ip = "192.168.1.50"
+# ip = "192.168.1.178"
+ip = "192.168.1.50"
 
 for zone in soco.discover(interface_addr=ip):
     info = zone.get_speaker_info()
