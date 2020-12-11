@@ -3,8 +3,6 @@ from soco import SoCo
 from soco.data_structures import DidlAudioBroadcast
 import ui
 
-print("1")
-
 main_group = None
 main_player: SoCo = None
 

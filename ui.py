@@ -6,8 +6,6 @@ import atexit
 from PIL import ImageFont, Image, ImageDraw
 from gfxhat import touch, lcd, backlight, fonts
 
-print("2")
-
 print("""menu-options.py
 This example shows how you might store a list of menu options associated
 with functions and navigate them on GFX HAT.
@@ -16,10 +14,6 @@ Press Ctrl+C or select "Exit" to exit.
 
 width, height = lcd.dimensions()
 
-# A squarer pixel font
-#font = ImageFont.truetype(fonts.BitocraFull, 11)
-
-# A slightly rounded, Ubuntu-inspired version of Bitocra
 font = ImageFont.truetype(fonts.BitbuntuFull, 10)
 
 image = Image.new('P', (width, height))
@@ -41,6 +35,24 @@ def set_backlight(r, g, b):
     backlight.set_all(r, g, b)
     backlight.show()
 
+def handler(ch, event):
+    global current_menu_option, trigger_action
+    if event != 'press':
+        return
+    if ch == 1:
+        current_menu_option += 1
+    if ch == 0:
+        current_menu_option -= 1
+    if ch == 4:
+        trigger_action = True
+    current_menu_option %= len(menu_options)
+
+def cleanup():
+    backlight.set_all(0, 0, 0)
+    backlight.show()
+    lcd.clear()
+    lcd.show()
+
 menu_options = [
             MenuOption('Set BL Red', set_backlight, (255, 0, 0)),
             MenuOption('Set BL Green', set_backlight, (0, 255, 0)),
@@ -54,17 +66,6 @@ current_menu_option = 1
 
 trigger_action = False
 
-def handler(ch, event):
-    global current_menu_option, trigger_action
-    if event != 'press':
-        return
-    if ch == 1:
-        current_menu_option += 1
-    if ch == 0:
-        current_menu_option -= 1
-    if ch == 4:
-        trigger_action = True
-    current_menu_option %= len(menu_options)
 
 for x in range(6):
     touch.set_led(x, 0)
@@ -73,11 +74,6 @@ for x in range(6):
 
 backlight.show()
 
-def cleanup():
-    backlight.set_all(0, 0, 0)
-    backlight.show()
-    lcd.clear()
-    lcd.show()
 
 atexit.register(cleanup)
 
