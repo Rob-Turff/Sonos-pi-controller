@@ -6,6 +6,8 @@ import atexit
 from PIL import ImageFont, Image, ImageDraw
 from gfxhat import touch, lcd, backlight, fonts
 
+print("2")
+
 print("""menu-options.py
 This example shows how you might store a list of menu options associated
 with functions and navigate them on GFX HAT.
