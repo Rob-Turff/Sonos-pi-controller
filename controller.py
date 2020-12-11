@@ -31,5 +31,8 @@ def start():
     my_ui.start()
 
 def change_station(uri):
-        print(main_player.get_current_track_info())
-        # main_player.play_uri(uri)
+        cur_info = main_player.get_current_track_info()
+        if cur_info["uri"] == uri:
+            main_player.pause
+        else:
+            main_player.play_uri(uri)
