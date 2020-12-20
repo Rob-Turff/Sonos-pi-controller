@@ -55,6 +55,7 @@ class UI:
     def handler(self, ch, event):
         if event != 'press':
             return
+        print("Button pressed: " + str(ch))
         if ch == 1:
             self.current_menu_option += 1
         if ch == 0:
