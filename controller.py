@@ -10,8 +10,8 @@ class Controller:
 
         self.paradise_radio = "aac://https://stream.radioparadise.com/mellow-320"
 
-        self.ip = "192.168.1.178"
-        # self.ip = "192.168.1.50"
+        # self.ip = "192.168.1.178"
+        self.ip = "192.168.1.50"
 
     def start(self):
         for zone in soco.discover(interface_addr=self.ip):
