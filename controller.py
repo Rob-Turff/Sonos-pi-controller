@@ -10,8 +10,8 @@ class Controller:
 
         self.paradise_radio = "aac://https://stream.radioparadise.com/mellow-320"
 
-        # self.ip = "192.168.1.178"
-        self.ip = "192.168.1.50"
+        self.ip = "192.168.1.178"
+        # self.ip = "192.168.1.50"
 
     def start(self):
         for zone in soco.discover(interface_addr=self.ip):
@@ -30,7 +30,7 @@ class Controller:
 
         my_ui = ui.UI(self, station_dict)
         my_ui.start()
-        self.change_station(self.paradise_radio, True)
+        # self.change_station(self.paradise_radio, True)
 
     def change_station(self, uri, force_radio):
         cur_info = self.main_player.get_current_track_info()
@@ -38,6 +38,8 @@ class Controller:
         print(uri)
         print(cur_info["uri"])
         if cur_info["uri"] == uri and is_stopped == "PLAYING":
-            self.main_player.pause()
+            print("Pausing: " + uri)
+            # self.main_player.pause()
         else:
-            self.main_player.play_uri(uri=uri, force_radio=force_radio)
+            print("Playing: " + uri)
+            # self.main_player.play_uri(uri=uri, force_radio=force_radio)
