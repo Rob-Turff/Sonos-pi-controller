@@ -79,7 +79,6 @@ class UI:
             self.controller.change_volume(-5)
         if ch == 5:
             self.controller.change_volume(5)
-        self.current_menu_option %= len(self.menu_options)
 
     def cleanup(self):
         backlight.set_all(0, 0, 0)
