@@ -29,6 +29,7 @@ class UI:
         self.font = ImageFont.truetype(fonts.BitbuntuFull, 10)
         self.image = Image.new('P', (self.width, self.height))
         self.draw = ImageDraw.Draw(self.image)
+        self.controller = controller
 
         for x in range(6):
             touch.set_led(x, 0)
@@ -52,16 +53,28 @@ class UI:
         backlight.set_all(r, g, b)
         backlight.show()
 
+    def change_menu_option(self, diff):
+        if self.current_menu_option == (len(self.menu_options) - 1) and diff > 0:
+            pass
+        elif self.current_menu_option == 0 and diff < 0:
+            pass
+        else:
+            self.current_menu_option += diff
+
     def handler(self, ch, event):
         if event != 'press':
             return
         print("Button pressed: " + str(ch))
         if ch == 1:
-            self.current_menu_option += 1
+            self.change_menu_option(diff=1)
         if ch == 0:
-            self.current_menu_option -= 1
+            self.change_menu_option(diff=-1)
         if ch == 4:
             self.trigger_action = True
+        if ch == 3:
+            self.controller.change_volume(-5)
+        if ch == 5:
+            self.controller.change_volume(5)
         self.current_menu_option %= len(self.menu_options)
 
     def cleanup(self):

@@ -43,3 +43,7 @@ class Controller:
         else:
             print("Playing: " + uri)
             # self.main_player.play_uri(uri=uri, force_radio=force_radio)
+
+    def change_volume(self, amount):
+        print("Changed volume by: %d" (amount))
+        self.main_player.set_relative_volume(amount)
