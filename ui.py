@@ -18,16 +18,6 @@ class MenuOption:
         self.action(*self.options)
 
 class UI:
-    def change_backlight(self):
-        if self.controller.get_playing_state():
-            colour = [255, 255, 255]
-        else:
-            colour = [255, 0, 0]
-        for x in range(6):
-            touch.set_led(x, 0)
-            backlight.set_pixel(x, colour[0], colour[1], colour[2])
-            touch.on(x, self.handler)
-
     def __init__(self, controller, options_dict):
         print("""menu-options.py
         This example shows how you might store a list of menu options associated
@@ -41,7 +31,10 @@ class UI:
         self.draw = ImageDraw.Draw(self.image)
         self.controller = controller
 
-        self.change_backlight()
+        for x in range(6):
+            touch.set_led(x, 0)
+            self.set_backlight()
+            touch.on(x, self.handler)
 
         backlight.show()
 
@@ -56,14 +49,18 @@ class UI:
 
         self.trigger_action = False
 
-    def set_backlight(self, r, g, b):
-        backlight.set_all(r, g, b)
+    def set_backlight(self):
+        if self.controller.get_playing_state():
+            colour = [255, 255, 255]
+        else:
+            colour = [255, 0, 0]
+        backlight.set_all(colour[0], colour[1], colour[2])
         backlight.show()
 
     def change_menu_option(self, diff):
-        if self.current_menu_option == (len(self.menu_options) - 1) and diff > 0:
+        if self.current_menu_option == len(self.menu_options) and diff > 0:
             pass
-        elif self.current_menu_option == 0 and diff < 0:
+        elif self.current_menu_option == 1 and diff < 0:
             pass
         else:
             self.current_menu_option += diff
@@ -91,7 +88,7 @@ class UI:
         lcd.show()
 
     def set_now_playing(self):
-        option = MenuOption("Now Playing: ", self.controller.toggle_play(), self.font, None)
+        option = MenuOption("Now Playing: ", self.controller.get_playing_state(), self.font, None)
         return option
 
     def start(self):
@@ -116,11 +113,12 @@ class UI:
                     if index == 0:
                         option = self.set_now_playing()
                         self.draw.rectangle(((x - 2, y - 1), (self.width, y + 10)), 1)
+                        self.draw.text((x, y), option.name, 0, self.font)
                     else:
                         option = self.menu_options[index - 1]
-                    if index == self.current_menu_option:
-                        self.draw.rectangle(((x-2, y-1), (self.width, y+10)), 1)
-                    self.draw.text((x, y), option.name, 0 if index == self.current_menu_option else 1, self.font)
+                        if index == self.current_menu_option:
+                            self.draw.rectangle(((x-2, y-1), (self.width, y+10)), 1)
+                        self.draw.text((x, y), option.name, 0 if index == self.current_menu_option else 1, self.font)
 
                 w, h = self.font.getsize('>')
                 self.draw.text((0, (self.height - h) / 2), '>', 1, self.font)
@@ -130,7 +128,7 @@ class UI:
                         pixel = self.image.getpixel((x, y))
                         lcd.set_pixel(x, y, pixel)
 
-                self.change_backlight()
+                self.set_backlight()
 
                 lcd.show()
                 time.sleep(1.0 / 30)
