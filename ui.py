@@ -108,10 +108,10 @@ class UI:
                         break
                     offset_top += 12
 
-                for index in range(len(self.menu_options) + 1):
+                for index in range(len(self.menu_options)):
                     x = 10
                     y = (index * 12) + (self.height / 2) - 4 - offset_top
-                    if index == 0:
+
 
                     option = self.menu_options[index]
                     if index == self.current_menu_option:
