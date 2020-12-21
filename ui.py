@@ -20,7 +20,7 @@ class MenuOption:
 class UI:
     def change_backlight(self):
         if self.controller.get_playing_state():
-            colour = [255, 255, 255]
+            colour = [255, 0, 255]
         else:
             colour = [255, 0, 0]
         for x in range(6):
