@@ -8,7 +8,7 @@ class Controller:
         self.main_group = None
         self.player: SoCo = None
 
-        self.paradise_radio = "aac://https://stream.radioparadise.com/mellow-320"
+        # self.paradise_radio = "aac://https://stream.radioparadise.com/mellow-320"
 
         # self.ip = "192.168.1.178"
         self.ip = "192.168.1.50"
@@ -43,6 +43,22 @@ class Controller:
         else:
             print("Playing: " + uri)
             # self.main_player.play_uri(uri=uri, force_radio=force_radio)
+
+    def toggle_play(self):
+        is_playing = self.get_playing_state()
+        if is_playing:
+            print("Pausing")
+            # self.main_player.pause()
+        else:
+            print("Playing")
+            # self.main_player.play()
+
+    def get_playing_state(self):
+        is_stopped = self.main_player.get_current_transport_info()["current_transport_state"]
+        if is_stopped == "PLAYING":
+            return True
+        else:
+            return False
 
     def change_volume(self, amount):
         print("Changed volume by: %d" % amount)

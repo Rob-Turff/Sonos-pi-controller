@@ -18,6 +18,16 @@ class MenuOption:
         self.action(*self.options)
 
 class UI:
+    def change_backlight(self):
+        if self.controller.get_playing_state():
+            colour = [255, 255, 255]
+        else:
+            colour = [255, 0, 0]
+        for x in range(6):
+            touch.set_led(x, 0)
+            backlight.set_pixel(x, colour[0], colour[1], colour[2])
+            touch.on(x, self.handler)
+
     def __init__(self, controller, options_dict):
         print("""menu-options.py
         This example shows how you might store a list of menu options associated
@@ -31,10 +41,7 @@ class UI:
         self.draw = ImageDraw.Draw(self.image)
         self.controller = controller
 
-        for x in range(6):
-            touch.set_led(x, 0)
-            backlight.set_pixel(x, 255, 255, 255)
-            touch.on(x, self.handler)
+        self.change_backlight()
 
         backlight.show()
 
@@ -83,6 +90,9 @@ class UI:
         lcd.clear()
         lcd.show()
 
+    def set_now_playing(self):
+        option = MenuOption("Now Playing: ", self.controller.toggle_play())
+
     def start(self):
         try:
             while True:
@@ -98,9 +108,11 @@ class UI:
                         break
                     offset_top += 12
 
-                for index in range(len(self.menu_options)):
+                for index in range(len(self.menu_options) + 1):
                     x = 10
                     y = (index * 12) + (self.height / 2) - 4 - offset_top
+                    if index == 0:
+
                     option = self.menu_options[index]
                     if index == self.current_menu_option:
                         self.draw.rectangle(((x-2, y-1), (self.width, y+10)), 1)
@@ -113,6 +125,8 @@ class UI:
                     for y in range(self.height):
                         pixel = self.image.getpixel((x, y))
                         lcd.set_pixel(x, y, pixel)
+
+                self.change_backlight()
 
                 lcd.show()
                 time.sleep(1.0 / 30)
