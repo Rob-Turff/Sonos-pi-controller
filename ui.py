@@ -20,7 +20,7 @@ class MenuOption:
 class UI:
     def change_backlight(self):
         if self.controller.get_playing_state():
-            colour = [255, 0, 255]
+            colour = [255, 255, 255]
         else:
             colour = [255, 0, 0]
         for x in range(6):
@@ -91,7 +91,8 @@ class UI:
         lcd.show()
 
     def set_now_playing(self):
-        option = MenuOption("Now Playing: ", self.controller.toggle_play())
+        option = MenuOption("Now Playing: ", self.controller.toggle_play(), self.font, None)
+        return option
 
     def start(self):
         try:
@@ -108,12 +109,15 @@ class UI:
                         break
                     offset_top += 12
 
-                for index in range(len(self.menu_options)):
+                for index in range(len(self.menu_options) + 1):
                     x = 10
                     y = (index * 12) + (self.height / 2) - 4 - offset_top
 
-
-                    option = self.menu_options[index]
+                    if index == 0:
+                        option = self.set_now_playing()
+                        self.draw.rectangle(((x - 2, y - 1), (self.width, y + 10)), 1)
+                    else:
+                        option = self.menu_options[index]
                     if index == self.current_menu_option:
                         self.draw.rectangle(((x-2, y-1), (self.width, y+10)), 1)
                     self.draw.text((x, y), option.name, 0 if index == self.current_menu_option else 1, self.font)
