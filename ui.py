@@ -111,7 +111,7 @@ class UI:
 
                     if index == 0:
                         option = self.set_now_playing()
-                        self.draw.rectangle(((0, 13), (self.width, 2)), 1)
+                        self.draw.rectangle(((0, 13), (self.width, 15)), 1)
                         self.draw.text((2, 1), option.name, 1, self.font)
                     else:
                         option = self.menu_options[index - 1]
