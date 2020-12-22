@@ -32,6 +32,7 @@ class UI:
         self.controller = controller
         self.slept = False
         self.sleep_timer = 0
+        self.fade = 255
 
         for x in range(6):
             touch.set_led(x, 0)
@@ -71,18 +72,20 @@ class UI:
         if event != 'press':
             return
         print("Button pressed: " + str(ch))
-        self.slept = False
-        self.sleep_timer = 0
-        if ch == 1:
-            self.change_menu_option(diff=1)
-        if ch == 0:
-            self.change_menu_option(diff=-1)
-        if ch == 4:
-            self.trigger_action = True
-        if ch == 3:
-            self.controller.change_volume(-5)
-        if ch == 5:
-            self.controller.change_volume(5)
+        if self.slept:
+            self.slept = False
+            self.sleep_timer = 0
+        else:
+            if ch == 1:
+                self.change_menu_option(diff=1)
+            if ch == 0:
+                self.change_menu_option(diff=-1)
+            if ch == 4:
+                self.trigger_action = True
+            if ch == 3:
+                self.controller.change_volume(-5)
+            if ch == 5:
+                self.controller.change_volume(5)
 
     def cleanup(self):
         backlight.set_all(0, 0, 0)
@@ -98,7 +101,7 @@ class UI:
     def start(self):
         try:
             while True:
-                if self.sleep_timer <= 60 * 1:
+                if self.sleep_timer <= 90:
                     self.image.paste(0, (0, 0, self.width, self.height))
                     offset_top = 0
 
@@ -140,10 +143,14 @@ class UI:
 
                     lcd.show()
                     self.sleep_timer += 1
+                elif self.fade > 0:
+                    self.slept = True
+                    backlight.set_all(self.fade, self.fade, self.fade)
+                    backlight.show()
+                    self.fade = 255 - ((self.sleep_timer - 90) * 5)
                 else:
                     if not self.slept:
                         self.cleanup()
-                        self.slept = True
 
                 time.sleep(1.0 / 30)
 
