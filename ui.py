@@ -77,6 +77,7 @@ class UI:
         if self.slept or self.fade != 255:
             self.slept = False
             self.sleep_timer = 0
+            self.fade = 255
         else:
             if ch == 1:
                 self.change_menu_option(diff=1)
