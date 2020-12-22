@@ -73,7 +73,7 @@ class UI:
     def handler(self, ch, event):
         if event != 'press':
             return
-        print("Button pressed: " + str(ch))
+        # print("Button pressed: " + str(ch))
         if self.slept or self.fade != 255:
             self.slept = False
             self.sleep_timer = 0

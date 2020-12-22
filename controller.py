@@ -39,13 +39,13 @@ class Controller:
     def change_station(self, uri, force_radio, title):
         cur_info = self.main_player.get_current_track_info()
         is_playing = self.get_playing_state()
-        print(cur_info["uri"])
+        # print(cur_info["uri"])
         if cur_info["uri"] in uri and is_playing:
-            print("Pausing: " + uri[0])
-            # self.main_player.pause()
+            # print("Pausing: " + uri[0])
+            self.main_player.pause()
         else:
-            print("Playing: " + uri[0])
-            # self.main_player.play_uri(uri=uri[0], force_radio=force_radio, title=title)
+            # print("Playing: " + uri[0])
+            self.main_player.play_uri(uri=uri[0], force_radio=force_radio, title=title)
 
     def get_current_station_name(self):
         cur_info = self.main_player.get_current_track_info()
