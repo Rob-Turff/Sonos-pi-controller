@@ -144,6 +144,7 @@ class UI:
                     lcd.show()
                     self.sleep_timer += 1
                 elif self.fade > 0:
+                    print(self.fade)
                     self.slept = True
                     backlight.set_all(self.fade, self.fade, self.fade)
                     backlight.show()
