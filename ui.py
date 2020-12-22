@@ -33,6 +33,7 @@ class UI:
         self.slept = False
         self.sleep_timer = 0
         self.fade = 255
+        self.is_playing = controller.get_playing_state()
 
         for x in range(6):
             touch.set_led(x, 0)
@@ -53,7 +54,8 @@ class UI:
         self.trigger_action = False
 
     def set_backlight(self):
-        if self.controller.get_playing_state():
+        self.is_playing = self.controller.get_playing_state()
+        if self.is_playing:
             colour = [255, 255, 255]
         else:
             colour = [255, 0, 0]
@@ -143,8 +145,10 @@ class UI:
 
                     lcd.show()
                 elif self.fade > 0:
-                    print(self.fade)
-                    backlight.set_all(self.fade, self.fade, self.fade)
+                    if self.is_playing:
+                        backlight.set_all(self.fade, self.fade, self.fade)
+                    else:
+                        backlight.set_all(self.fade, 0, 0)
                     backlight.show()
                     self.fade = 255 - (self.sleep_timer - 90)
                 else:
