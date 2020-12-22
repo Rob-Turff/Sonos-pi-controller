@@ -97,7 +97,7 @@ class UI:
                 offset_top = 0
 
                 if self.trigger_action:
-                    self.menu_options[self.current_menu_option].trigger()
+                    self.menu_options[self.current_menu_option - 1].trigger()
                     self.trigger_action = False
 
                 for index in range(len(self.menu_options)):
