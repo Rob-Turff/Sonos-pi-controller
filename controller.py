@@ -6,7 +6,7 @@ import ui
 class Controller:
     def __init__(self):
         self.main_group = None
-        self.player: SoCo = None
+        self.main_player: SoCo = None
 
         # self.paradise_radio = "aac://https://stream.radioparadise.com/mellow-320"
 
@@ -38,7 +38,7 @@ class Controller:
         print(uri)
         print(cur_info["uri"])
         print(self.main_player.is_playing_radio)
-        print(self.main_player.music_source)
+        print(self.main_player.get_current_track_info())
         if cur_info["uri"] == uri and is_stopped == "PLAYING":
             print("Pausing: " + uri)
             # self.main_player.pause()
