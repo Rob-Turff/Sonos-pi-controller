@@ -87,6 +87,7 @@ class UI:
         lcd.show()
 
     def set_now_playing(self):
+
         option = MenuOption("Now Playing: ", self.controller.get_playing_state(), self.font, None)
         return option
 
