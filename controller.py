@@ -47,6 +47,12 @@ class Controller:
             print("Playing: " + uri[0])
             # self.main_player.play_uri(uri=uri[0], force_radio=force_radio, title=title)
 
+    def get_current_station_name(self):
+        cur_info = self.main_player.get_current_track_info()
+        for station in self.station_dict:
+            if cur_info["uri"] in self.station_dict[station]:
+                return station
+        return "Unknown"
 
     def get_playing_state(self):
         is_stopped = self.main_player.get_current_transport_info()["current_transport_state"]
