@@ -72,7 +72,7 @@ class UI:
         if event != 'press':
             return
         print("Button pressed: " + str(ch))
-        if self.slept:
+        if self.slept or self.fade != 255:
             self.slept = False
             self.sleep_timer = 0
         else:
@@ -144,12 +144,12 @@ class UI:
                     lcd.show()
                 elif self.fade > 0:
                     print(self.fade)
-                    self.slept = True
                     backlight.set_all(self.fade, self.fade, self.fade)
                     backlight.show()
-                    self.fade = 255 - ((self.sleep_timer - 90) * 5)
+                    self.fade = 255 - (self.sleep_timer - 90)
                 else:
                     if not self.slept:
+                        self.slept = True
                         self.cleanup()
                 self.sleep_timer += 1
                 time.sleep(1.0 / 30)
