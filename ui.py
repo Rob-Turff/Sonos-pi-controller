@@ -98,7 +98,7 @@ class UI:
     def start(self):
         try:
             while True:
-                if self.sleep_timer <= 5 * 1:
+                if self.sleep_timer <= 60 * 1:
                     self.image.paste(0, (0, 0, self.width, self.height))
                     offset_top = 0
 
