@@ -43,7 +43,7 @@ class UI:
         self.menu_options = []
 
         for key in options_dict:
-            self.menu_options.append(MenuOption(key, controller.change_station, self.font, (options_dict[key], True)))
+            self.menu_options.append(MenuOption(key, controller.change_station, self.font, (options_dict[key], True, key)))
 
         self.current_menu_option = 1
 
