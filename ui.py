@@ -30,6 +30,8 @@ class UI:
         self.image = Image.new('P', (self.width, self.height))
         self.draw = ImageDraw.Draw(self.image)
         self.controller = controller
+        self.slept = False
+        self.sleep_timer = 0
 
         for x in range(6):
             touch.set_led(x, 0)
@@ -69,6 +71,8 @@ class UI:
         if event != 'press':
             return
         print("Button pressed: " + str(ch))
+        self.slept = False
+        self.sleep_timer = 0
         if ch == 1:
             self.change_menu_option(diff=1)
         if ch == 0:
@@ -94,46 +98,53 @@ class UI:
     def start(self):
         try:
             while True:
-                self.image.paste(0, (0, 0, self.width, self.height))
-                offset_top = 0
+                if self.sleep_timer <= 5 * 1:
+                    self.image.paste(0, (0, 0, self.width, self.height))
+                    offset_top = 0
 
-                if self.trigger_action:
-                    self.menu_options[self.current_menu_option - 1].trigger()
-                    self.trigger_action = False
+                    if self.trigger_action:
+                        self.menu_options[self.current_menu_option - 1].trigger()
+                        self.trigger_action = False
 
-                for index in range(len(self.menu_options)):
-                    if index == self.current_menu_option:
-                        break
-                    offset_top += 12
+                    for index in range(len(self.menu_options)):
+                        if index == self.current_menu_option:
+                            break
+                        offset_top += 12
 
-                for index in range(len(self.menu_options) + 1):
-                    x = 10
-                    y = (index * 12) + (self.height / 2) - 4 - offset_top
+                    for index in range(len(self.menu_options) + 1):
+                        x = 10
+                        y = (index * 12) + (self.height / 2) - 4 - offset_top
 
-                    if index == 0:
-                        option = self.set_now_playing()
-                        self.draw.rectangle(((x, 13), (self.width, 13)), 1)
-                        self.draw.text((x, 1), option.name, 1, self.font)
-                        self.draw.text((0, 1), '#', 1, self.font)
-                    else:
-                        diff = self.current_menu_option - 2
-                        if index - diff > 0:
-                            option = self.menu_options[index - 1]
-                            if index == self.current_menu_option:
-                                self.draw.rectangle(((x-2, y-1), (self.width, y+10)), 1)
-                            self.draw.text((x, y), option.name, 0 if index == self.current_menu_option else 1, self.font)
+                        if index == 0:
+                            option = self.set_now_playing()
+                            self.draw.rectangle(((x, 13), (self.width, 13)), 1)
+                            self.draw.text((x, 1), option.name, 1, self.font)
+                            self.draw.text((0, 1), '#', 1, self.font)
+                        else:
+                            diff = self.current_menu_option - 2
+                            if index - diff > 0:
+                                option = self.menu_options[index - 1]
+                                if index == self.current_menu_option:
+                                    self.draw.rectangle(((x-2, y-1), (self.width, y+10)), 1)
+                                self.draw.text((x, y), option.name, 0 if index == self.current_menu_option else 1, self.font)
 
-                w, h = self.font.getsize('>')
-                self.draw.text((0, (self.height - h) / 2), '>', 1, self.font)
+                    w, h = self.font.getsize('>')
+                    self.draw.text((0, (self.height - h) / 2), '>', 1, self.font)
 
-                for x in range(self.width):
-                    for y in range(self.height):
-                        pixel = self.image.getpixel((x, y))
-                        lcd.set_pixel(x, y, pixel)
+                    for x in range(self.width):
+                        for y in range(self.height):
+                            pixel = self.image.getpixel((x, y))
+                            lcd.set_pixel(x, y, pixel)
 
-                self.set_backlight()
+                    self.set_backlight()
 
-                lcd.show()
+                    lcd.show()
+                    self.sleep_timer += 1
+                else:
+                    if not self.slept:
+                        self.cleanup()
+                        self.slept = True
+
                 time.sleep(1.0 / 30)
 
         except KeyboardInterrupt:
