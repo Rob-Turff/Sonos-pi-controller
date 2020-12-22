@@ -142,7 +142,6 @@ class UI:
                     self.set_backlight()
 
                     lcd.show()
-                    self.sleep_timer += 1
                 elif self.fade > 0:
                     print(self.fade)
                     self.slept = True
@@ -152,7 +151,7 @@ class UI:
                 else:
                     if not self.slept:
                         self.cleanup()
-
+                self.sleep_timer += 1
                 time.sleep(1.0 / 30)
 
         except KeyboardInterrupt:
