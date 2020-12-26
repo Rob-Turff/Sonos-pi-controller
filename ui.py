@@ -54,13 +54,17 @@ class UI:
         self.trigger_action = False
 
     def set_backlight(self):
-        self.is_playing = self.controller.get_playing_state()
-        if self.is_playing:
-            colour = [255, 255, 255]
-        else:
-            colour = [255, 0, 0]
-        backlight.set_all(colour[0], colour[1], colour[2])
-        backlight.show()
+        try:
+            self.is_playing = self.controller.get_playing_state()
+            if self.is_playing:
+                colour = [255, 255, 255]
+            else:
+                colour = [255, 0, 0]
+            backlight.set_all(colour[0], colour[1], colour[2])
+            backlight.show()
+        except:
+            print("Network Error")
+
 
     def change_menu_option(self, diff):
         if self.current_menu_option == len(self.menu_options) and diff > 0:
