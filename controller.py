@@ -25,17 +25,6 @@ class Controller:
             data = json.load(file)
             return data
 
-    def start(self):
-        for zone in soco.discover(interface_addr=self.ip):
-            info = zone.get_speaker_info()
-            if info["zone_name"] == "South":
-                self.main_group = zone.group
-
-        self.main_player = self.main_group.coordinator
-
-        my_ui = ui.UI(self, self.station_dict)
-        my_ui.start()
-
     def change_station(self, uri, force_radio, title):
         cur_info = self.main_player.get_current_track_info()
         is_playing = self.get_playing_state()
