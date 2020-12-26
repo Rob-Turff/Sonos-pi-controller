@@ -17,10 +17,11 @@ class Controller:
                     info = zone.get_speaker_info()
                     if info["zone_name"] == "South":
                         self.main_group = zone.group
-                break
             except:
                 print("Interface not enabled")
                 time.sleep(1.0)
+            else:
+                break
 
         self.main_player: SoCo = self.main_group.coordinator
 
