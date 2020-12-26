@@ -7,25 +7,18 @@ import time
 
 class Controller:
     def __init__(self):
+        time.sleep(15)
         self.station_dict = self.get_stations()
         # self.ip = "192.168.1.178"
         self.ip = "192.168.1.50"
         
-        while True:
-            try:
-                for zone in soco.discover(interface_addr=self.ip):
-                    info = zone.get_speaker_info()
-                    if info["zone_name"] == "South":
-                        self.main_group = zone.group
-            except:
-                print("Interface not enabled")
-                time.sleep(1.0)
-            else:
-                break
+        for zone in soco.discover(interface_addr=self.ip):
+            info = zone.get_speaker_info()
+            if info["zone_name"] == "South":
+                self.main_group = zone.group
 
         self.main_player: SoCo = self.main_group.coordinator
 
-        time.sleep(5)
         my_ui = ui.UI(self, self.station_dict)
         my_ui.start()
 
