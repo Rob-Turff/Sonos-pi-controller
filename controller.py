@@ -25,6 +25,7 @@ class Controller:
 
         self.main_player: SoCo = self.main_group.coordinator
 
+        time.sleep(5)
         my_ui = ui.UI(self, self.station_dict)
         my_ui.start()
 
