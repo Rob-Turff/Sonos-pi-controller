@@ -7,7 +7,6 @@ import time
 
 class Controller:
     def __init__(self):
-        time.sleep(15)
         self.station_dict = self.get_stations()
         # self.ip = "192.168.1.178"
         self.ip = "192.168.1.50"
