@@ -3,17 +3,24 @@ from soco import SoCo
 from soco.data_structures import DidlAudioBroadcast
 import ui
 import json
+import time
 
 class Controller:
     def __init__(self):
         self.station_dict = self.get_stations()
         # self.ip = "192.168.1.178"
         self.ip = "192.168.1.50"
-
-        for zone in soco.discover(interface_addr=self.ip):
-            info = zone.get_speaker_info()
-            if info["zone_name"] == "South":
-                self.main_group = zone.group
+        
+        while True:
+            try:
+                for zone in soco.discover(interface_addr=self.ip):
+                    info = zone.get_speaker_info()
+                    if info["zone_name"] == "South":
+                        self.main_group = zone.group
+                break
+            except:
+                print("Interface not enabled")
+                time.sleep(1.0)
 
         self.main_player: SoCo = self.main_group.coordinator
 
