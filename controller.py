@@ -66,8 +66,8 @@ class Controller:
                 self.main_player.pause()
             else:
                 self.main_player.play_uri(uri=uri[0], force_radio=force_radio, title=title)
-        except Exception:
-            self.logger.error(Exception)
+        except Exception as err:
+            self.logger.error(err)
             self.change_station(uri, force_radio, title)
 
     def get_current_station_name(self):
@@ -80,8 +80,8 @@ class Controller:
                     self.logger.debug("Unrecognized station name:")
                     self.logger.debug(station)
                     self.last_station = "Unknown"
-        except Exception:
-            self.logger.error(Exception)
+        except Exception as err:
+            self.logger.error(err)
         return self.last_station
 
     def get_playing_state(self):
@@ -91,8 +91,8 @@ class Controller:
                 self.last_playing_state = True
             else:
                 self.last_playing_state = False
-        except Exception:
-            self.logger.error(Exception)
+        except Exception as err:
+            self.logger.error(err)
         return self.last_playing_state
 
     def change_volume(self, amount):
