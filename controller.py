@@ -1,3 +1,5 @@
+import logging
+
 import soco
 from soco import SoCo
 from soco.data_structures import DidlAudioBroadcast
@@ -6,12 +8,40 @@ import json
 import time
 
 
+def get_logger(
+        LOG_FORMAT="%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
+        LOG_NAME="NewsCollector",
+        LOG_FILE_INFO="var/controller.log",
+        LOG_FILE_ERROR="/var/controller.err"):
+    log = logging.getLogger(LOG_NAME)
+    log_formatter = logging.Formatter(LOG_FORMAT)
+
+    # comment this to suppress console output
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(log_formatter)
+    log.addHandler(stream_handler)
+
+    file_handler_info = logging.FileHandler(LOG_FILE_INFO, mode='a')
+    file_handler_info.setFormatter(log_formatter)
+    file_handler_info.setLevel(logging.INFO)
+    log.addHandler(file_handler_info)
+
+    file_handler_error = logging.FileHandler(LOG_FILE_ERROR, mode='a')
+    file_handler_error.setFormatter(log_formatter)
+    file_handler_error.setLevel(logging.ERROR)
+    log.addHandler(file_handler_error)
+
+    log.setLevel(logging.INFO)
+
+    return log
+
 class Controller:
     def __init__(self):
         self.station_dict = self.get_stations()
         self.ip = "192.168.1.50"
         self.last_station = "Unknown"
         self.last_playing_state = False
+        self.logger = get_logger()
 
         for zone in soco.discover(interface_addr=self.ip):
             info = zone.get_speaker_info()
@@ -24,7 +54,7 @@ class Controller:
         my_ui.start()
 
     def get_stations(self):
-        with open("stations.json") as file:
+        with open("var/stations.json") as file:
             data = json.load(file)
             return data
 
@@ -36,8 +66,8 @@ class Controller:
                 self.main_player.pause()
             else:
                 self.main_player.play_uri(uri=uri[0], force_radio=force_radio, title=title)
-        except:
-            print("Network Connection failed")
+        except Exception:
+            self.logger.error(Exception)
             self.change_station(uri, force_radio, title)
 
     def get_current_station_name(self):
@@ -48,8 +78,8 @@ class Controller:
                     self.last_station = station
                 else:
                     self.last_station = "Unknown"
-        except:
-            print("Network Connection failed")
+        except Exception:
+            self.logger.error(Exception)
         return self.last_station
 
     def get_playing_state(self):
@@ -59,8 +89,8 @@ class Controller:
                 self.last_playing_state = True
             else:
                 self.last_playing_state = False
-        except:
-            print("Network Connection failed")
+        except Exception:
+            self.logger.error(Exception)
         return self.last_playing_state
 
     def change_volume(self, amount):
