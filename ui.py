@@ -107,6 +107,8 @@ class UI:
 
     def start(self):
         try:
+            current_station = self.set_now_playing()
+            refresh_counter = 0
             while True:
                 if self.sleep_timer <= 90:
                     self.image.paste(0, (0, 0, self.width, self.height))
@@ -126,9 +128,11 @@ class UI:
                         y = (index * 12) + (self.height / 2) - 4 - offset_top
 
                         if index == 0:
-                            option = self.set_now_playing()
+                            if refresh_counter >= 30:
+                                current_station = self.set_now_playing()
+                                refresh_counter = 0
                             self.draw.rectangle(((x, 13), (self.width, 13)), 1)
-                            self.draw.text((x, 1), option.name, 1, self.font)
+                            self.draw.text((x, 1), current_station.name, 1, self.font)
                             self.draw.text((0, 1), '#', 1, self.font)
                         else:
                             diff = self.current_menu_option - 2
@@ -161,6 +165,7 @@ class UI:
                         self.slept = True
                         self.cleanup()
                 self.sleep_timer += 1
+                refresh_counter += 1
                 time.sleep(1.0 / 30)
 
         except KeyboardInterrupt:
