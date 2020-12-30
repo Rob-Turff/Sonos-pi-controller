@@ -5,12 +5,14 @@ import ui
 import json
 import time
 
+
 class Controller:
     def __init__(self):
         self.station_dict = self.get_stations()
-        # self.ip = "192.168.1.178"
         self.ip = "192.168.1.50"
-        
+        self.last_station = "Unknown"
+        self.last_playing_state = False
+
         for zone in soco.discover(interface_addr=self.ip):
             info = zone.get_speaker_info()
             if info["zone_name"] == "South":
@@ -27,29 +29,39 @@ class Controller:
             return data
 
     def change_station(self, uri, force_radio, title):
-        cur_info = self.main_player.get_current_track_info()
-        is_playing = self.get_playing_state()
-        # print(cur_info["uri"])
-        if cur_info["uri"] in uri and is_playing:
-            # print("Pausing: " + uri[0])
-            self.main_player.pause()
-        else:
-            # print("Playing: " + uri[0])
-            self.main_player.play_uri(uri=uri[0], force_radio=force_radio, title=title)
+        try:
+            cur_info = self.main_player.get_current_track_info()
+            is_playing = self.get_playing_state()
+            if cur_info["uri"] in uri and is_playing:
+                self.main_player.pause()
+            else:
+                self.main_player.play_uri(uri=uri[0], force_radio=force_radio, title=title)
+        except:
+            print("Network Connection failed")
+            self.change_station(uri, force_radio, title)
 
     def get_current_station_name(self):
-        cur_info = self.main_player.get_current_track_info()
-        for station in self.station_dict:
-            if cur_info["uri"] in self.station_dict[station]:
-                return station
-        return "Unknown"
+        try:
+            cur_info = self.main_player.get_current_track_info()
+            for station in self.station_dict:
+                if cur_info["uri"] in self.station_dict[station]:
+                    self.last_station = station
+                else:
+                    self.last_station = "Unknown"
+        except:
+            print("Network Connection failed")
+        return self.last_station
 
     def get_playing_state(self):
-        is_stopped = self.main_player.get_current_transport_info()["current_transport_state"]
-        if is_stopped == "PLAYING":
-            return True
-        else:
-            return False
+        try:
+            is_stopped = self.main_player.get_current_transport_info()["current_transport_state"]
+            if is_stopped == "PLAYING":
+                self.last_playing_state = True
+            else:
+                self.last_playing_state = False
+        except:
+            print("Network Connection failed")
+        return self.last_playing_state
 
     def change_volume(self, amount):
         print("Changed volume by: %d" % amount)
