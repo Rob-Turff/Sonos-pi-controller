@@ -77,6 +77,8 @@ class Controller:
                 if cur_info["uri"] in self.station_dict[station]:
                     self.last_station = station
                 else:
+                    self.logger.debug("Unrecognized station name:")
+                    self.logger.debug(station)
                     self.last_station = "Unknown"
         except Exception:
             self.logger.error(Exception)
