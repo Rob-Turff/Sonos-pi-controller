@@ -54,7 +54,7 @@ class Controller:
         my_ui.start()
 
     def get_stations(self):
-        with open("var/stations.json") as file:
+        with open("stations.json") as file:
             data = json.load(file)
             return data
 
