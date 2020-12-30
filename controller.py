@@ -10,7 +10,7 @@ import time
 
 def get_logger(
         LOG_FORMAT="%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
-        LOG_NAME="NewsCollector",
+        LOG_NAME="controller",
         LOG_FILE_INFO="var/controller.log",
         LOG_FILE_ERROR="var/controller.err"):
     log = logging.getLogger(LOG_NAME)
@@ -31,7 +31,7 @@ def get_logger(
     file_handler_error.setLevel(logging.ERROR)
     log.addHandler(file_handler_error)
 
-    log.setLevel(logging.INFO)
+    log.setLevel(logging.DEBUG)
 
     return log
 
