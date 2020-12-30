@@ -12,7 +12,7 @@ def get_logger(
         LOG_FORMAT="%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
         LOG_NAME="NewsCollector",
         LOG_FILE_INFO="var/controller.log",
-        LOG_FILE_ERROR="/var/controller.err"):
+        LOG_FILE_ERROR="var/controller.err"):
     log = logging.getLogger(LOG_NAME)
     log_formatter = logging.Formatter(LOG_FORMAT)
 
