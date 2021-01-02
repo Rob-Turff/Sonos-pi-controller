@@ -19,7 +19,7 @@ class MenuOption:
         self.action(*self.options)
 
     def get_scrolled_text(self):
-        return name[self.scroll_position:]+"    "+name[:self.scroll_position]
+        return self.name[self.scroll_position:]+"    "+self.name[:self.scroll_position]
     
 
 class UI:
