@@ -20,6 +20,11 @@ class MenuOption:
 
     def get_scrolled_text(self):
         return self.name[self.scroll_position:]+"    "+self.name[:self.scroll_position]
+        
+    def scroll_text(self):
+        if len(self.name) > 20:
+            option.scroll_position +=1
+            self.scroll_position = self.scroll_position % ((len(self.name)-1)+4) #+4 from length of spacers
     
 
 class UI:
@@ -146,8 +151,7 @@ class UI:
 
                                 if index == self.current_menu_option:
                                     self.draw.rectangle(((x-2, y-1), (self.width, y+10)), 1)
-                                    option.scroll_position +=1
-                                    option.scroll_position = option.scroll_position % (len(option.name)-1)
+                                    option.scroll_text()
                                 else:
                                     option.scroll_position = 0
                                 self.draw.text((x, y), option.get_scrolled_text(), 0 if index == self.current_menu_option else 1, self.font)
