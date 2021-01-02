@@ -13,7 +13,7 @@ class MenuOption:
         self.options = options
         self.size = font.getsize(self.name)
         self.width, self.height = self.size
-                self.scroll_position = =-1
+        self.scroll_position = =-1
 
     def trigger(self):
         self.action(*self.options)
