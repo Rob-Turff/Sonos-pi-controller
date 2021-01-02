@@ -23,7 +23,7 @@ class MenuOption:
         
     def scroll_text(self):
         if len(self.name) > 20:
-            option.scroll_position +=1
+            self.scroll_position +=1
             self.scroll_position = self.scroll_position % ((len(self.name)-1)+4) #+4 from length of spacers
     
 
