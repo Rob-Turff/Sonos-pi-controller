@@ -8,7 +8,7 @@ from gfxhat import touch, lcd, backlight, fonts
 
 class MenuOption:
     def __init__(self, name, action, font, options=()):
-        self.name = name
+        self.name = name+"    "
         self.action = action
         self.options = options
         self.size = font.getsize(self.name)
@@ -19,10 +19,10 @@ class MenuOption:
         self.action(*self.options)
 
     def get_scrolled_text(self):
-        return self.name[self.scroll_position:]+"    "+self.name[:self.scroll_position]
+        return self.name[self.scroll_position:]+self.name[:self.scroll_position]
         
     def scroll_text(self):
-        if len(self.name) > 20:
+        if len(self.name) > 24:
             self.scroll_position +=1
             self.scroll_position = self.scroll_position % ((len(self.name)-1)+4) #+4 from length of spacers
     
