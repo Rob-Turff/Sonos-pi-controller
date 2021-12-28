@@ -1,6 +1,6 @@
 {
   "BBC Radio 4": [
-    "x-sonosapi-stream:s25419?sid=254&flags=8224&sn=0"
+    "x-rincon-mp3radio://http://stream.live.vc.bbcmedia.co.uk/bbc_radio_fourfm?s=1640695384&e=1640709784&h=b07b354668cb0427041a4e60a9b5dba5"
   ],
   "Radio Paradise Direct": [
     "x-rincon-mp3radio://https://stream.radioparadise.com/aac-320",
