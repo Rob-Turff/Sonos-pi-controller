@@ -44,7 +44,7 @@ class Controller:
         self.last_playing_state = False
         self.logger = get_logger()
 
-        self.logger.debug("\nMy ip is: " + self.ip)
+        self.logger.debug("My ip is: " + self.ip)
 
         for zone in soco.discover(interface_addr=self.ip):
             info = zone.get_speaker_info()
@@ -78,7 +78,7 @@ class Controller:
     def get_current_station_name(self):
         try:
             cur_info = self.main_player.get_current_media_info()
-            self.last_station = cur_info.channel
+            self.last_station = cur_info["channel"]
         except Exception as err:
             self.logger.error(err)
         return self.last_station
