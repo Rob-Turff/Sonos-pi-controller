@@ -5,7 +5,6 @@ from soco import SoCo
 from soco.data_structures import DidlAudioBroadcast
 import ui
 import json
-import socket
 import time
 
 
@@ -37,28 +36,15 @@ def get_logger(
     return log
 
 
-def get_ip():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        # doesn't even have to be reachable
-        s.connect(('10.255.255.255', 1))
-        IP = s.getsockname()[0]
-    except Exception:
-        IP = '127.0.0.1'
-    finally:
-        s.close()
-    return IP
-
-
 class Controller:
-    def __init__(self):
+    def __init__(self, ip):
         self.station_dict = self.get_stations()
-        self.ip = get_ip()
+        self.ip = ip
         self.last_station = "Unknown"
         self.last_playing_state = False
         self.logger = get_logger()
 
-        self.logger.debug("My ip is: " + self.ip + "\n")
+        self.logger.debug("\nMy ip is: " + self.ip)
 
         for zone in soco.discover(interface_addr=self.ip):
             info = zone.get_speaker_info()
