@@ -53,6 +53,8 @@ class Controller:
 
         self.main_player: SoCo = self.main_group.coordinator
 
+        self.logger.debug("Current Soco version is: " + str(soco.__version__))
+
         my_ui = ui.UI(self, self.station_dict)
         my_ui.start()
 
