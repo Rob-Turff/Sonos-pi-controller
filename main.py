@@ -16,13 +16,13 @@ def connect(host='http://google.com'):
 
 def start():
     while not connect():
-        time.sleep(10)
         print("Failed To Connect at: ")
         print(datetime.now())
+        time.sleep(10)
 
     os.chdir("/usr/share/Sonos-pi-controller")
     my_controller = controller.Controller()
 
 
-time.sleep(10)
+time.sleep(1)
 start()
