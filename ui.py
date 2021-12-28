@@ -8,14 +8,24 @@ from gfxhat import touch, lcd, backlight, fonts
 
 class MenuOption:
     def __init__(self, name, action, font, options=()):
-        self.name = name
+        self.name = name+"    "
         self.action = action
         self.options = options
         self.size = font.getsize(self.name)
         self.width, self.height = self.size
+        self.scroll_position = -1
 
     def trigger(self):
         self.action(*self.options)
+
+    def get_scrolled_text(self):
+        return self.name[self.scroll_position:]+self.name[:self.scroll_position]
+        
+    def scroll_text(self):
+        if len(self.name) > 24:
+            self.scroll_position +=1
+            self.scroll_position = self.scroll_position % ((len(self.name)-1)+4) #+4 from length of spacers
+    
 
 class UI:
     def __init__(self, controller, options_dict):
@@ -138,9 +148,13 @@ class UI:
                             diff = self.current_menu_option - 2
                             if index - diff > 0:
                                 option = self.menu_options[index - 1]
+
                                 if index == self.current_menu_option:
                                     self.draw.rectangle(((x-2, y-1), (self.width, y+10)), 1)
-                                self.draw.text((x, y), option.name, 0 if index == self.current_menu_option else 1, self.font)
+                                    option.scroll_text()
+                                else:
+                                    option.scroll_position = 0
+                                self.draw.text((x, y), option.get_scrolled_text(), 0 if index == self.current_menu_option else 1, self.font)
 
                     w, h = self.font.getsize('>')
                     self.draw.text((0, (self.height - h) / 2), '>', 1, self.font)
