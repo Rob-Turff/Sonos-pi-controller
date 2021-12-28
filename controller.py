@@ -3,7 +3,7 @@ import logging
 import soco
 from soco import SoCo
 from soco.data_structures import DidlAudioBroadcast
-# import ui
+import ui
 import json
 import time
 
@@ -48,13 +48,13 @@ class Controller:
 
         for zone in soco.discover(interface_addr=self.ip):
             info = zone.get_speaker_info()
-            if info["zone_name"] == "South":
+            if info["zone_name"] == "West" or info["zone_name"] == "East":
                 self.main_group = zone.group
 
         self.main_player: SoCo = self.main_group.coordinator
 
-        # my_ui = ui.UI(self, self.station_dict)
-        # my_ui.start()
+        my_ui = ui.UI(self, self.station_dict)
+        my_ui.start()
 
     def get_stations(self):
         with open("stations.json") as file:
