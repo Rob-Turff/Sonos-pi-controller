@@ -1,6 +1,6 @@
 {
   "BBC Radio 4": [
-    "'x-rincon-mp3radio://http://stream.live.vc.bbcmedia.co.uk/bbc_radio_fourfm?s=1640695384&e=1640709784&h=b07b354668cb0427041a4e60a9b5dba5'"
+    "x-rincon-mp3radio://http://stream.live.vc.bbcmedia.co.uk/bbc_radio_fourfm?s=1640695384&e=1640709784&h=b07b354668cb0427041a4e60a9b5dba5"
   ],
   "Radio Paradise Direct": [
     "x-rincon-mp3radio://https://stream.radioparadise.com/aac-320",
@@ -19,5 +19,8 @@
   ],
   "Exmouth AiR": [
     "x-rincon-mp3radio://https://streaming.broadcastradio.com:10325/exmouthmp3"
+  ],
+  "Radio Exe Devon": [
+    "x-rincon-mp3radio://https://streams.radio.co/sf2a4d9132/listen?DIST=TuneIn&TGT=TuneIn&maxServers=2&partnertok=eyJhbGciOiJIUzI1NiIsImtpZCI6InR1bmVpbiIsInR5cCI6IkpXVCJ9.eyJ0cnVzdGVkX3BhcnRuZXIiOnRydWUsImlhdCI6MTY0MDcwMjgyNiwiaXNzIjoidGlzcnYifQ.DzG2eUX-yafZ_wvMf6-2u2OQofeM5vU47x0slsNORY0"
   ]
 }

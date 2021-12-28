@@ -3,7 +3,7 @@ import logging
 import soco
 from soco import SoCo
 from soco.data_structures import DidlAudioBroadcast
-import ui
+# import ui
 import json
 import time
 
@@ -53,8 +53,13 @@ class Controller:
 
         self.main_player: SoCo = self.main_group.coordinator
 
-        my_ui = ui.UI(self, self.station_dict)
-        my_ui.start()
+        t_info = self.main_player.get_current_track_info()
+        m_info = self.main_player.get_current_media_info()
+        print(t_info)
+        print(m_info)
+
+        # my_ui = ui.UI(self, self.station_dict)
+        # my_ui.start()
 
     def get_stations(self):
         with open("stations.json") as file:
