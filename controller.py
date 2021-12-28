@@ -75,14 +75,8 @@ class Controller:
 
     def get_current_station_name(self):
         try:
-            cur_info = self.main_player.get_current_track_info()
-            for station in self.station_dict:
-                if cur_info["uri"] in self.station_dict[station]:
-                    self.last_station = station
-                else:
-                    self.logger.debug("Unrecognized station name:")
-                    self.logger.debug(station)
-                    self.last_station = "Unknown"
+            cur_info = self.main_player.get_current_media_info()
+            self.last_station = cur_info.channel
         except Exception as err:
             self.logger.error(err)
         return self.last_station

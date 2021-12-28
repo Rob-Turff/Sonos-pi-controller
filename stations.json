@@ -1,6 +1,6 @@
 {
   "BBC Radio 4": [
-    "hls-radio://http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/nonuk/sbr_low/llnw/bbc_radio_fourfm.m3u8"
+    "x-sonosapi-stream:s25419?sid=254&flags=8224&sn=0"
   ],
   "Radio Paradise Direct": [
     "x-rincon-mp3radio://https://stream.radioparadise.com/aac-320",
