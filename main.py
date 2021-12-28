@@ -28,10 +28,11 @@ def connect(ip):
 
 def start():
     ip = get_ip()
-    while not connect():
-        print("Failed To Connect at: ")
-        print(datetime.now())
+    while not connect(ip):
         time.sleep(10)
+        print("Failed To Connect to: " + ip + " at: ")
+        print(datetime.now())
+        ip = get_ip()
 
     os.chdir("/usr/share/Sonos-pi-controller")
     my_controller = controller.Controller(ip)
