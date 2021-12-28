@@ -53,11 +53,6 @@ class Controller:
 
         self.main_player: SoCo = self.main_group.coordinator
 
-        t_info = self.main_player.get_current_track_info()
-        m_info = self.main_player.get_current_media_info()
-        print(t_info)
-        print(m_info)
-
         my_ui = ui.UI(self, self.station_dict)
         my_ui.start()
 
