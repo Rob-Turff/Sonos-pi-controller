@@ -12,7 +12,7 @@ def connect(host='http://google.com'):
 		return False
 
 
-def start(self):
+def start():
 	while not connect():
 		time.sleep(10)
 		print("Failed To Connect at: ")
