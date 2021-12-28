@@ -34,7 +34,7 @@ def start():
         print(datetime.now())
         ip = get_ip()
 
-    os.chdir("/usr/share/Sonos-pi-controller")
+    # os.chdir("/usr/share/Sonos-pi-controller")
     my_controller = controller.Controller(ip)
 
 
